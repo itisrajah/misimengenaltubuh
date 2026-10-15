@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-width=1.0">
+    <title>Laman Utama - Pendaftaran</title>
+    <style>
+        /* Modern, clean styling for your website */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-container {
+            background: white;
+            padding: 30px 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 15px;
+        }
+        input:focus, select:focus {
+            border-color: #1a73e8;
+            outline: none;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #1557b0;
+        }
+        button:disabled {
+            background-color: #9e9e9e;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Sila Isi Maklumat</h2>
+        
+        <form id="pendaftaranForm">
+            <div class="form-group">
+                <label for="namaPenuh">Nama Penuh</label>
+                <!-- required makes it compulsory -->
+                <input type="text" id="namaPenuh" name="namaPenuh" placeholder="Masukkan nama penuh anda" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="kelas">Kelas</label>
+                <!-- required makes it compulsory -->
+                <select id="kelas" name="kelas" required>
+                    <option value="" disabled selected>Pilih Kelas Anda</option>
+                    <option value="Arif">Arif</option>
+                    <option value="Bintara">Bintara</option>
+                </select>
+            </div>
+            
+            <button type="submit" id="submitBtn">Hantar</button>
+        </form>
+    </div>
+
+    <script>
+        // 1. PASTE YOUR GOOGLE APPS SCRIPT URL HERE:
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxBP-QFsK7KBJ6oNZBHdzV4MgfzW2NoauJlIPcoYYI9Jmhwy9eqFBNONilSz1bYH5HG/exec";
+        
+        // 2. PASTE THE PAGE YOU WANT TO REDIRECT TO HERE:
+        const REDIRECT_URL = "https://sites.google.com/moe-dl.edu.my/permainan-sentuhan-selamat-tid/full-page-embed";
+
+        document.getElementById("pendaftaranForm").addEventListener("submit", function(e) {
+            e.preventDefault(); // Prevents default form refresh
+            
+            const submitBtn = document.getElementById("submitBtn");
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Menyimpan data...";
+
+            // Gather the data from the form
+            const formData = new FormData();
+            formData.append("namaPenuh", document.getElementById("namaPenuh").value);
+            formData.append("kelas", document.getElementById("kelas").value);
+
+            // Send data to Google Sheets in the background
+            fetch(SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                body: formData
+            })
+            .then(() => {
+                // Instantly redirect to the next page once data is sent
+                window.location.href = REDIRECT_URL;
+            })
+            .catch(error => {
+                alert("Ralat sistem. Sila cuba lagi.");
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Hantar";
+            });
+        });
+    </script>
+
+</body>
+</html>
